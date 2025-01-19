@@ -43,6 +43,7 @@ jobs:
 
       # https://github.com/marketplace/actions/install-gh-cli
       - name: install github cli
+        if: ${{ !contains(inputs.runner, 'ubuntu') && !contains(inputs.runner, 'macos') && !contains(inputs.runner, 'windows') }}
         uses: dev-hanz-ops/install-gh-cli-action@8fff9050dae2d81b38f94500d8b74ad1d1d47410 # v0.2.0
 
       - name: comment on pr
