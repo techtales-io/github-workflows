@@ -1,0 +1,57 @@
+---
+name: deploy to gh pages
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        description: runner name
+        type: string
+        default: ubuntu-latest
+        required: false
+      environment:
+        description: environment name
+        type: string
+        default: github-pages
+        required: false
+      path:
+        description: path to be deployed
+        type: string
+        default: "."
+        required: false
+
+jobs:
+  deploy:
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # https://github.com/marketplace/actions/harden-runner
+      - name: harden runner
+        uses: step-security/harden-runner@v2.10.3
+        with:
+          egress-policy: audit
+
+      # https://github.com/marketplace/actions/checkout
+      - name: checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      # https://github.com/marketplace/actions/configure-github-pages
+      - name: setup pages
+        uses: actions/configure-pages@v3.0.6
+
+      # https://github.com/marketplace/actions/upload-github-pages-artifact
+      - name: upload artifact
+        uses: actions/upload-pages-artifact@v2.0.0
+        with:
+          path: ${{ inputs.path }}
+
+      # https://github.com/marketplace/actions/deploy-github-pages-site
+      - name: deploy to gh pages
+        id: deployment
+        uses: actions/deploy-pages@v2.0.5
