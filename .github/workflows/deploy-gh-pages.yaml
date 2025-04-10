@@ -43,7 +43,7 @@ jobs:
 
       # https://github.com/marketplace/actions/configure-github-pages
       - name: setup pages
-        uses: actions/configure-pages@b8130d9ab958b325bbde9786d62f2c97a9885a0e # v3.0.7
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
 
       # https://github.com/marketplace/actions/upload-github-pages-artifact
       - name: upload artifact
@@ -54,4 +54,4 @@ jobs:
       # https://github.com/marketplace/actions/deploy-github-pages-site
       - name: deploy to gh pages
         id: deployment
-        uses: actions/deploy-pages@v2.0.5
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
