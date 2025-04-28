@@ -17,7 +17,7 @@ on:
       dry-run:
         description: dry run
         type: string
-        default: null
+        default: "null"
         required: false
       log-level:
         description: log-level
