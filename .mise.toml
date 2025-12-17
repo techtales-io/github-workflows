@@ -2,4 +2,4 @@
 experimental = true
 
 [tools]
-pre-commit = "4.5.0"
+pre-commit = "4.5.1"
