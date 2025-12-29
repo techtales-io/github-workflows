@@ -1,5 +1,3 @@
-[settings]
-experimental = true
-
 [tools]
-pre-commit = "4.5.1"
+"aqua:pre-commit/pre-commit" = "4.5.1"
+"aqua:go-task/task" = "3.46.4"
