@@ -17,7 +17,7 @@ on:
       path:
         description: image path in registry
         type: string
-        required: true
+        required: false
       tags:
         description: image tag - default sha
         type: string
@@ -41,7 +41,7 @@ jobs:
       packages: write
       id-token: write
     env:
-      image-path: ${{ inputs.registry }}/${{ github.repository }}/${{ inputs.path }}
+      image-path: ${{ inputs.registry }}/${{ github.repository }}${{ inputs.path && format('/{0}', inputs.path) || '' }}
 
     steps:
       # https://github.com/marketplace/actions/harden-runner
