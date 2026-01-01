@@ -57,4 +57,4 @@ jobs:
 
       - name: list all changed files
         run: |
-          echo "${{ steps.changed-files.outputs.all_changed_files }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.changed-files.outputs.all_changed_files }}" >> "$GITHUB_STEP_SUMMARY"
