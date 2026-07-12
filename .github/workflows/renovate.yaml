@@ -43,6 +43,9 @@ concurrency:
 jobs:
   renovate:
     uses: ./.github/workflows/run-renovate.yaml
+    permissions:
+      contents: read
+      pull-requests: write
     with:
       runner: ubuntu-latest
       configuration-file: .github/renovate-bot.json5
