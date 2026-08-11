@@ -19,6 +19,13 @@ on:
         type: string
         default: info
         required: false
+    secrets:
+      github-client-id:
+        description: github app client id
+        required: false
+      github-app-key:
+        description: github app private key
+        required: false
 
 jobs:
   megalinter:
@@ -30,74 +37,74 @@ jobs:
     steps:
       # https://github.com/marketplace/actions/harden-runner
       - name: harden runner
-        uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
         with:
           egress-policy: audit
 
       # https://github.com/marketplace/actions/create-github-app-token
       - name: generate token
         id: generate-token
-        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
-          app-id: ${{ secrets.github-app-id }}
+          client-id: ${{ secrets.github-client-id }}
           private-key: ${{ secrets.github-app-key }}
 
       # https://github.com/marketplace/actions/checkout
       - name: checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # https://github.com/marketplace/actions/megalinter
       - name: megalinter cupcake
-        uses: oxsecurity/megalinter/flavors/cupcake@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # v8.8.0
+        uses: oxsecurity/megalinter/flavors/cupcake@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
         if: inputs.flavor == 'cupcake'
         env:
           LOG_LEVEL: ${{ inputs.log-level || 'info' }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: megalinter documentation
-        uses: oxsecurity/megalinter/flavors/documentation@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # v8.8.0
+        uses: oxsecurity/megalinter/flavors/documentation@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
         if: inputs.flavor == 'documentation'
         env:
           LOG_LEVEL: ${{ inputs.log-level || 'info' }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: megalinter go
-        uses: oxsecurity/megalinter/flavors/go@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # v8.8.0
+        uses: oxsecurity/megalinter/flavors/go@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
         if: inputs.flavor == 'go'
         env:
           LOG_LEVEL: ${{ inputs.log-level || 'info' }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: megalinter javascript
-        uses: oxsecurity/megalinter/flavors/javascript@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # v8.8.0
+        uses: oxsecurity/megalinter/flavors/javascript@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
         if: inputs.flavor == 'javascript'
         env:
           LOG_LEVEL: ${{ inputs.log-level || 'info' }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: megalinter python
-        uses: oxsecurity/megalinter/flavors/python@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # v8.8.0
+        uses: oxsecurity/megalinter/flavors/python@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
         if: inputs.flavor == 'python'
         env:
           LOG_LEVEL: ${{ inputs.log-level || 'info' }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: megalinter security
-        uses: oxsecurity/megalinter/flavors/security@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # v8.8.0
+        uses: oxsecurity/megalinter/flavors/security@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
         if: inputs.flavor == 'security'
         env:
           LOG_LEVEL: ${{ inputs.log-level || 'info' }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: megalinter terraform
-        uses: oxsecurity/megalinter/flavors/terraform@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # v8.8.0
+        uses: oxsecurity/megalinter/flavors/terraform@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
         if: inputs.flavor == 'terraform'
         env:
           LOG_LEVEL: ${{ inputs.log-level || 'info' }}
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: megalinter full
-        uses: oxsecurity/megalinter@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # v8.8.0
+        uses: oxsecurity/megalinter@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
         if: inputs.flavor == '' || inputs.flavor == 'full'
         env:
           LOG_LEVEL: ${{ inputs.log-level || 'info' }}
