@@ -1,0 +1,265 @@
+---
+name: megalinter
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        description: runner name
+        type: string
+        default: ubuntu-latest
+        required: false
+      flavor:
+        description: flavor
+        type: string
+        default: ""
+        required: false
+      log-level:
+        description: log-level
+        type: string
+        default: info
+        required: false
+    secrets:
+      github-client-id:
+        description: github app client id
+        required: false
+      github-app-key:
+        description: github app private key
+        required: false
+
+jobs:
+  megalinter-cupcake:
+    if: inputs.flavor == 'cupcake'
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      # https://github.com/marketplace/actions/harden-runner
+      - name: harden runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      # https://github.com/marketplace/actions/create-github-app-token
+      - name: generate token
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.github-client-id }}
+          private-key: ${{ secrets.github-app-key }}
+
+      # https://github.com/marketplace/actions/checkout
+      - name: checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # https://github.com/marketplace/actions/megalinter
+      - name: megalinter cupcake
+        uses: oxsecurity/megalinter/flavors/cupcake@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
+        env:
+          LOG_LEVEL: ${{ inputs.log-level || 'info' }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  megalinter-documentation:
+    if: inputs.flavor == 'documentation'
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: harden runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - name: generate token
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.github-client-id }}
+          private-key: ${{ secrets.github-app-key }}
+
+      - name: checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: megalinter documentation
+        uses: oxsecurity/megalinter/flavors/documentation@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
+        env:
+          LOG_LEVEL: ${{ inputs.log-level || 'info' }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  megalinter-go:
+    if: inputs.flavor == 'go'
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: harden runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - name: generate token
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.github-client-id }}
+          private-key: ${{ secrets.github-app-key }}
+
+      - name: checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: megalinter go
+        uses: oxsecurity/megalinter/flavors/go@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
+        env:
+          LOG_LEVEL: ${{ inputs.log-level || 'info' }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  megalinter-javascript:
+    if: inputs.flavor == 'javascript'
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: harden runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - name: generate token
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.github-client-id }}
+          private-key: ${{ secrets.github-app-key }}
+
+      - name: checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: megalinter javascript
+        uses: oxsecurity/megalinter/flavors/javascript@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
+        env:
+          LOG_LEVEL: ${{ inputs.log-level || 'info' }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  megalinter-python:
+    if: inputs.flavor == 'python'
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: harden runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - name: generate token
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.github-client-id }}
+          private-key: ${{ secrets.github-app-key }}
+
+      - name: checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: megalinter python
+        uses: oxsecurity/megalinter/flavors/python@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
+        env:
+          LOG_LEVEL: ${{ inputs.log-level || 'info' }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  megalinter-security:
+    if: inputs.flavor == 'security'
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: harden runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - name: generate token
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.github-client-id }}
+          private-key: ${{ secrets.github-app-key }}
+
+      - name: checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: megalinter security
+        uses: oxsecurity/megalinter/flavors/security@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
+        env:
+          LOG_LEVEL: ${{ inputs.log-level || 'info' }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  megalinter-terraform:
+    if: inputs.flavor == 'terraform'
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: harden runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - name: generate token
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.github-client-id }}
+          private-key: ${{ secrets.github-app-key }}
+
+      - name: checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: megalinter terraform
+        uses: oxsecurity/megalinter/flavors/terraform@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
+        env:
+          LOG_LEVEL: ${{ inputs.log-level || 'info' }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  megalinter-full:
+    if: inputs.flavor == '' || inputs.flavor == 'full'
+    runs-on: ${{ inputs.runner }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: harden runner
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - name: generate token
+        id: generate-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.github-client-id }}
+          private-key: ${{ secrets.github-app-key }}
+
+      - name: checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: megalinter full
+        uses: oxsecurity/megalinter@15e5b45552097e318c93de385779ce3b1084052c # v10.0.0
+        env:
+          LOG_LEVEL: ${{ inputs.log-level || 'info' }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
